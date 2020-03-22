@@ -1,35 +1,15 @@
+const path = require('path')
 const express = require('express')
+// provided in the wrapper function
+const publicDir = path.join(__dirname, '../public')
 
 const app = express()
+// index.html page served using app.use
+app.use(express.static(publicDir))
 
 /****************/
 /**** Routes ****/
 /****************/
-app.get('', (req, res) => {
-    res.send('<h1>Hello Express!</h1>')
-})
-
-app.get('/help', (req, res) => {
-    res.send([{
-        name: 'Maurice',
-        Age: 36
-    }, {
-        name: 'Iwonka'
-    }
-
-    ])
-})
-
-app.get('/about', (req, res) => {
-    res.send('<h1>About</h1>')
-})
-
-app.get('/weather', (req, res) => {
-    res.send({
-        forecast: 'forecast',
-        location: 'location'
-    })
-})
 
 /****************/
 /** Run Server **/
