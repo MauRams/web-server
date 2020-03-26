@@ -1,3 +1,8 @@
-h1{
-    color: green;
+h1 {
+    color: brown;
+    stroke: blanchedalmond;
+}
+
+img {
+    max-width: 250px;
 }
