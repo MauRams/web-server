@@ -2,6 +2,9 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const request = require('request')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 // this needs to be declared before the path.join
 const app = express()
 
@@ -22,7 +25,7 @@ app.use(express.static(publicDir))
 /****************/
 
 // root
-app.get('', (req, res) => {   
+app.get('', (req, res) => {
     res.render('index', {
         title: 'Weather App',
         name: 'Maurice'
@@ -39,39 +42,50 @@ app.get('/about', (req, res) => {
 app.get('/help', (req, res) => {
     res.render('help', {
         doc_title: 'Help Page',
-        helpText: 'This is some help text',        
+        helpText: 'This is some help text',
         title: 'Help is on the way!',
         name: 'Maurice'
     })
 })
 
 app.get('/weather', (req, res) => {
-
-    if(!req.query.address){
+    if (!req.query.address) {
         return res.send({
-            error: 'You must provide an address'
+            error: 'You must provide a valid address'
         })
     }
+    //needs better error handling as app crashes when no valid location is entered
+    geocode(req.query.address, (error, { latitude, longitude, location }) => {
 
-    console.log(req.query.address);
+        if (error) {
+            return res.send({ error })
+        } else {
+            forecast(latitude, longitude, (error, forecastData) => {
+                if (error) {
+                    return res.send({ error })
+                }
+                res.send({
+                    forecast: forecastData,
+                    location,
+                    address: req.query.address
+                })
+            })
+        }
 
-    res.send({
-        forecast: 'it is sunny',
-        location: 'Dublin',
-        address: req.query.address
+
     })
 })
 
-app.get('/products', (req, res) =>{
+app.get('/products', (req, res) => {
 
-    if(!req.query.search){
+    if (!req.query.search) {
         return res.send({
             error: 'you must provide a search term'
         })
     }
 
     console.log(req.query.search);
-    
+
     res.send({
         products: []
     })
@@ -86,7 +100,7 @@ app.get('/help/*', (req, res) => {
 })
 
 // 404
-app.get('*', (req, res) =>{
+app.get('*', (req, res) => {
     res.render('404', {
         title: '404',
         name: 'Maurice',
