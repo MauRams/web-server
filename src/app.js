@@ -1,13 +1,16 @@
+//Set up packages
 const path = require('path')
 const express = require('express')
 // this needs to be declared before the path.join
 const app = express()
-// provided in the wrapper function
+// provided in the wrapper function, we need to tell the app where to find the dir where the views are stored
 const publicDir = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, '../templates')
+console.log(viewsPath);
+
 // index.html page served using app.use
 app.set('view engine', 'hbs')
-// need to tell the app where to find the dir where the view are stored
-app.set('views', path.join(__dirname, '../views'))
+app.set('views', viewsPath)
 app.use(express.static(publicDir))
 
 /****************/
