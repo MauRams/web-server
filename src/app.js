@@ -45,6 +45,24 @@ app.get('/help', (req, res) => {
     })
 })
 
+app.get('/help/*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Maurice',
+        errorMessage: 'Article Not Found'
+    })
+})
+
+// 404
+app.get('*', (req, res) =>{
+    res.render('404', {
+        title: '404',
+        name: 'Maurice',
+        errorMessage: 'Page Not Found'
+    })
+})
+
+
 
 /****************/
 /** Run Server **/
