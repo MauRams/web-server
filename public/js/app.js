@@ -1,6 +1,10 @@
 const weatherForm = document.querySelector('form')
-
 const searchElement = document.querySelector('input')
+const forecastMsg = document.querySelector('#forecast')
+const locationMsg = document.querySelector('#location')
+
+forecastMsg.textContent = ''
+locationMsg.textContent = ''
 
 weatherForm.addEventListener('submit', (e) => {
     //prevent the browser refresh
@@ -8,14 +12,18 @@ weatherForm.addEventListener('submit', (e) => {
 
     const location = searchElement.value
 
+    forecastMsg.textContent = ('...loading')
+    locationMsg.textContent = ('')
+
     fetch('http://localhost:3000/weather?address=' + location).then((response) => {
+        
         response.json().then((data) => {
             if (data.error) {
-                console.log(data.error);
+                forecastMsg.textContent = data.error
 
             } else {
-                console.log(data.forecast);
-                console.log(data.location);
+                forecastMsg.textContent = data.forecast
+                locationMsg.textContent = data.location
             }
         })
     })
