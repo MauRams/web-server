@@ -54,8 +54,8 @@ app.get('/weather', (req, res) => {
             error: 'You must provide a valid address'
         })
     }
-    //needs better error handling as app crashes when no valid location is entered
-    geocode(req.query.address, (error, { latitude, longitude, location }) => {
+    //setting up a default parameter prevents the application crashing
+    geocode(req.query.address, (error, { latitude, longitude, location }= {}) => {
 
         if (error) {
             return res.send({ error })
